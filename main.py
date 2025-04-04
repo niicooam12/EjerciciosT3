@@ -7,3 +7,6 @@ if __name__ == "__main__":
     TorreHanoi().resolver()
     Matriz().calcular_determinante_recursivo()
     Matriz().calcular_determinante_iterativo()
+    Polinomio().restar()
+    Polinomio().dividir()
+    Polinomio().eliminar_termino()
