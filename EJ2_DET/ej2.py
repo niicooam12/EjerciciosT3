@@ -34,3 +34,13 @@ class Matriz:
             c * (d * h - e * g)
         )
         return determinante
+
+matriz_ejemplo = [
+    [2, 3, 1],
+    [4, 5, 6],
+    [7, 8, 9]
+]
+
+matriz = Matriz(matriz_ejemplo)
+print("Determinante calculado recursivamente:", matriz.calcular_determinante_recursivo())
+print("Determinante calculado iterativamente:", matriz.calcular_determinante_iterativo())
