@@ -3,9 +3,9 @@ class Matriz:
         self.matriz = matriz
 
     def calcular_determinante_recursivo(self):
-        return self._determinante_recursivo(self.matriz)
+        return self.determinante_recursivo(self.matriz)
 
-    def _determinante_recursivo(self, matriz):
+    def determinante_recursivo(self, matriz):
         if len(matriz) != 3 or any(len(fila) != 3 for fila in matriz):
             return("La matriz debe ser de 3x3")
         

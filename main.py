@@ -1,3 +1,7 @@
-from "1.EJ Hanoi.ej1" import TorreHanoi
-from "2.EJ Determinante" import Matriz
-from "3.EJ Rally" import 
+from EJ1_HANOI.ej1 import TorreHanoi
+from EJ2_DET.ej2 import Matriz
+from EJ3_RALLY.ej3 import  Nave
+from EJ4_POLINOMIOS.ej4 import Polinomio
+
+if __name__ == "__main__":
+    TorreHanoi().resolver()
