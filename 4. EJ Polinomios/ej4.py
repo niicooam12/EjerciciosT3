@@ -1,56 +1,69 @@
-naves = [
-    {"nombre": "Cometa Veloz", "longitud": 50, "tripulantes": 4, "pasajeros": 6},
-    {"nombre": "Titán del Cosmos", "longitud": 55, "tripulantes": 6, "pasajeros": 7},
-    {"nombre": "nave1", "longitud": 45, "tripulantes": 4, "pasajeros": 5},
-    {"nombre": "nave2", "longitud": 60, "tripulantes": 5, "pasajeros": 4},
-    {"nombre": "nave3", "longitud": 50, "tripulantes": 4, "pasajeros": 6},
-    {"nombre": "nave4", "longitud": 48, "tripulantes": 5, "pasajeros": 5},
-    {"nombre": "nave5", "longitud": 59, "tripulantes": 6, "pasajeros": 7},
-    {"nombre": "nave6", "longitud": 40, "tripulantes": 3, "pasajeros": 3},
-    {"nombre": "GXnave7", "longitud": 45, "tripulantes": 4, "pasajeros": 5},
-    {"nombre": "nave8", "longitud": 52, "tripulantes": 5, "pasajeros": 6},
-]
+class Polinomio:
+    def __init__(self, terminos=None):
+        # terminos es un diccionario donde la clave es el exponente y el valor es el coeficiente
+        if terminos is None:
+            self.terminos = {}
+        else:
+            self.terminos = terminos
 
-# Ordenar naves por nombre y longitud descendente
-naves_ordenadas = sorted(naves, key=lambda x: (x["nombre"], -x["longitud"]))
-print("Naves ordenadas por nombre y longitud:")
-for nave in naves_ordenadas:
-    print(nave)
+    def __str__(self):
+        if not self.terminos:
+            return "0"
+        resultado = []
+        for exp in sorted(self.terminos.keys(), reverse=True):
+            coef = self.terminos[exp]
+            if coef != 0:
+                if exp == 0:
+                    resultado.append(f"{coef}")
+                else:
+                    resultado.append(f"{coef}x^{exp}")
+        return " + ".join(resultado)
 
-# Filtrar naves seleccionadas
-seleccion_naves = {"Cometa Veloz", "Titán del Cosmos"}
-print("\nNaves seleccionadas:")
-for nave in naves:
-    if nave["nombre"] in seleccion_naves:
-        print(nave)
+    def restar(self, otro):
+        resultado = Polinomio()
+        for exp in self.terminos:
+            resultado.terminos[exp] = self.terminos[exp]
+        for exp in otro.terminos:
+            if exp in resultado.terminos:
+                resultado.terminos[exp] -= otro.terminos[exp]
+            else:
+                resultado.terminos[exp] = -otro.terminos[exp]
+        # Eliminar términos con coeficiente 0
+        for exp in list(resultado.terminos.keys()):
+            if resultado.terminos[exp] == 0:
+                del resultado.terminos[exp]
+        return resultado
 
-# Top 5 naves con más pasajeros
-naves_pasajeros_top5 = sorted(naves, key=lambda nave: nave['pasajeros'], reverse=True)[:5]
-print("\nTop 5 naves con más pasajeros:")
-for nave in naves_pasajeros_top5:
-    print(nave)
+    def dividir(self, otro):
+        if not otro.terminos:
+            raise ValueError("No se puede dividir entre un polinomio vacío.")
+        resultado = Polinomio()
+        dividendo = Polinomio(self.terminos.copy())
+        while dividendo.terminos and max(dividendo.terminos) >= max(otro.terminos):
+            exp_dividendo = max(dividendo.terminos)
+            exp_divisor = max(otro.terminos)
+            coef_dividendo = dividendo.terminos[exp_dividendo]
+            coef_divisor = otro.terminos[exp_divisor]
+            nuevo_exp = exp_dividendo - exp_divisor
+            nuevo_coef = coef_dividendo // coef_divisor
+            resultado.terminos[nuevo_exp] = nuevo_coef
+            # Restar el término correspondiente
+            for exp in otro.terminos:
+                exp_actual = exp + nuevo_exp
+                coef_actual = otro.terminos[exp] * nuevo_coef
+                if exp_actual in dividendo.terminos:
+                    dividendo.terminos[exp_actual] -= coef_actual
+                else:
+                    dividendo.terminos[exp_actual] = -coef_actual
+            # Eliminar términos con coeficiente 0
+            for exp in list(dividendo.terminos.keys()):
+                if dividendo.terminos[exp] == 0:
+                    del dividendo.terminos[exp]
+        return resultado
 
-# Nave con más tripulantes
-nave_mas_tripulantes = max(naves, key=lambda nave: nave['tripulantes'])
-print("\nNave con más tripulantes:")
-print(nave_mas_tripulantes)
+    def eliminar_termino(self, exponente):
+        if exponente in self.terminos:
+            del self.terminos[exponente]
 
-# Naves cuyo nombre empieza con "GX"
-naves_gx = [nave for nave in naves if nave["nombre"].startswith("GX")]
-print("\nNaves cuyo nombre empieza con 'GX':")
-for nave in naves_gx:
-    print(nave)
-
-# Naves con 6 o más tripulantes
-naves_6_tripulantes = [nave for nave in naves if nave["tripulantes"] >= 6]
-print("\nNaves con 6 o más tripulantes:")
-for nave in naves_6_tripulantes:
-    print(nave)
-
-# Nave más pequeña y más grande por longitud
-nave_pequena = min(naves, key=lambda nave: nave["longitud"])
-nave_grande = max(naves, key=lambda nave: nave["longitud"])
-print("\nNave más pequeña:")
-print(nave_pequena)
-print("\nNave más grande:")
-print(nave_grande)
+    def existe_termino(self, exponente):
+        return exponente in self.terminos
