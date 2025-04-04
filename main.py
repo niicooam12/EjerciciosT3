@@ -5,3 +5,5 @@ from EJ4_POLINOMIOS.ej4 import Polinomio
 
 if __name__ == "__main__":
     TorreHanoi().resolver()
+    Matriz().calcular_determinante_recursivo()
+    Matriz().calcular_determinante_iterativo()
